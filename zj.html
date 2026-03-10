@@ -19,7 +19,7 @@
             position: relative;
         }
 
-        /* 🌟 爱心飘落动画 */
+        /* 爱心飘落动画 */
         .heart {
             position: absolute;
             width: 20px;
@@ -61,7 +61,7 @@
             }
         }
 
-        /* ✨ 弹窗样式 */
+        /* 弹窗样式 */
         .popup {
             position: absolute;
             width: 220px;
@@ -76,7 +76,7 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
             user-select: none;
             animation: fadeIn 0.3s ease;
-            z-index: 10; /* 确保弹窗在爱心上方 */
+            z-index: 10;
         }
 
         @keyframes fadeIn {
@@ -100,70 +100,47 @@
     <div class="title">✨ 静静，我想你啦 ✨</div>
 
     <script>
-        // 1. 爱心生成函数
+        // 生成爱心
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
-            
-            // 随机位置
             const x = Math.random() * window.innerWidth;
-            const size = Math.random() * 10 + 10; // 10-20px
-            
+            const size = Math.random() * 10 + 10;
             heart.style.left = `${x}px`;
             heart.style.top = `-20px`;
             heart.style.width = `${size}px`;
             heart.style.height = `${size}px`;
-            heart.style.animationDuration = `${Math.random() * 3 + 2}s`; // 2-5秒落下
-            
+            heart.style.animationDuration = `${Math.random() * 3 + 2}s`;
             document.body.appendChild(heart);
-
-            // 动画结束后移除
-            setTimeout(() => {
-                heart.remove();
-            }, 5000);
+            setTimeout(() => heart.remove(), 5000);
         }
 
-        // 2. 弹窗生成函数
+        // 生成弹窗
         function createPopup() {
             const popup = document.createElement('div');
             popup.className = 'popup';
             popup.textContent = '静静，我想你啦 ❤️❤️❤️';
-            
             const x = Math.random() * (window.innerWidth - 220);
             const y = Math.random() * (window.innerHeight - 80);
-            
             popup.style.left = `${x}px`;
             popup.style.top = `${y}px`;
-            
             document.body.appendChild(popup);
-            
-            setTimeout(() => {
-                popup.remove();
-            }, 3000);
+            setTimeout(() => popup.remove(), 3000);
         }
 
-        // 3. 批量启动
-        function startRomance开始恋爱() {
-            // 生成爱心（每30毫秒一个）
-            setInterval设置定时器(createHeart创建心形, 30);
-            
-            // 生成弹窗（每100毫秒一个）
+        // 启动效果
+        function startRomance() {
+            setInterval(createHeart, 30);
             let count = 0;
-            const interval = setInterval设置定时器(() => {
-                createPopup创建弹窗();
-                count++;
-                if (count >= 200) {
-                    clearInterval(interval);
-                }
+            const interval = setInterval(() => {
+                createPopup();
+                if (++count >= 200) clearInterval(interval);
             }, 100);
         }
 
-        // 页面加载自动开始
         window.addEventListener('load', startRomance);
-        
-        // 点击屏幕再次触发
-        document.body.addEventListener('click'点击, startRomance);
-    </script脚本>
-</body正文>
+        document.body.addEventListener('click', startRomance);
+    </script>
+</body>
 </html>
 
