@@ -11,13 +11,57 @@
             box-sizing: border-box;
             font-family: "Microsoft Yahei", sans-serif;
         }
-        body {主体 {
-            width: 100vw;宽度: 100vw;
-            height: 100vh;高度: 100vh;
-            background: #fff0f5;背景: #fff0f5;背景: #fff0f5;背景: #fff0f5;
-            overflow: hidden;溢出: 隐藏;
-            position: relative;位置: 相对;
+        body {
+            width: 100vw;
+            height: 100vh;
+            background: #fff0f5;
+            overflow: hidden;
+            position: relative;
         }
+
+        /* 🌟 爱心飘落动画 */
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff69b4;
+            transform: rotate(-45deg);
+            animation: heartFall linear infinite;
+            opacity: 0.8;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff69b4;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -10px;
+            left: 0;
+        }
+
+        .heart::after {
+            top: 0;
+            left: -10px;
+        }
+
+        @keyframes heartFall {
+            0% {
+                transform: rotate(-45deg) translateY(-20px);
+                opacity: 1;
+            }
+            100% {
+                transform: rotate(-45deg) translateY(100vh);
+                opacity: 0;
+            }
+        }
+
+        /* ✨ 弹窗样式 */
         .popup {
             position: absolute;
             width: 220px;
@@ -31,21 +75,24 @@
             font-size: 18px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
             user-select: none;
-            animation: fadeIn 0.3s ease;动画: 淡入 0.3s 缓动;
+            animation: fadeIn 0.3s ease;
+            z-index: 10; /* 确保弹窗在爱心上方 */
         }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }到 { 透明度: 1; 变换: 缩放(1); }
+            to { opacity: 1; transform: scale(1); }
         }
-        .title {        .标题 {
-            position: fixed;位置: 固定;
-            top: 50%;顶部: 50%;顶部: 50%;顶部: 50%;
-            left: 50%;左侧: 50%;左: 50%;左侧: 50%;
-            transform: translate(-50%, -50%);翻译(-50%, -50%);
-            font-size: 48px;48像素;
-            color: #ff69b4;颜色颜色: #ff69b4;颜色: #ff69b4;
+
+        .title {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            color: #ff69b4;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            z-index: -1;
+            z-index: 1;
         }
     </style>
 </head>
@@ -53,43 +100,70 @@
     <div class="title">✨ 静静，我想你啦 ✨</div>
 
     <script>
-        // 生成随机位置的祝福弹窗
+        // 1. 爱心生成函数
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            
+            // 随机位置
+            const x = Math.random() * window.innerWidth;
+            const size = Math.random() * 10 + 10; // 10-20px
+            
+            heart.style.left = `${x}px`;
+            heart.style.top = `-20px`;
+            heart.style.width = `${size}px`;
+            heart.style.height = `${size}px`;
+            heart.style.animationDuration = `${Math.random() * 3 + 2}s`; // 2-5秒落下
+            
+            document.body.appendChild(heart);
+
+            // 动画结束后移除
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+
+        // 2. 弹窗生成函数
         function createPopup() {
             const popup = document.createElement('div');
             popup.className = 'popup';
-            popup.textContent = '静静，我想你啦 ❤️❤️❤️';弹出窗口.textContent = '静静，我想你啦 ❤️❤️❤️';
+            popup.textContent = '静静，我想你啦 ❤️❤️❤️';
             
-            // 随机位置（避免超出屏幕）
             const x = Math.random() * (window.innerWidth - 220);
-            const y = Math.random随机随机随机随机随机() * (window窗口窗口窗口窗口窗口窗口窗口窗口.innerHeight - 80);() * (窗口.innerHeight - 80);随机随机() * (窗口窗口.innerHeight - 80);() * (窗口.innerHeight - 80);
+            const y = Math.random() * (window.innerHeight - 80);
             
-            popup.style.left = `${x}px`;x}px`;弹出窗口.样式.左 = `${x}px`;x}px`;x}px`;x}px；弹出窗口.样式.左 = `${x}px`;x}px`;
-            popup.style.top = `${y}px`;弹出框.样式.顶部 = `${y}px`;
+            popup.style.left = `${x}px`;
+            popup.style.top = `${y}px`;
             
-            document.body.appendChild(popup);文档.body.appendChild(弹出框);弹出框);文档.body.appendChild(弹出框);弹出框);文档.body.appendChild(弹出框);弹出框);文档.body.appendChild(弹出框);弹出框);文档.body.appendChild(弹出框);弹出框);文档.body.appendChild(弹出框);弹出框);文档.body.appendChild(弹出框);弹出框);文档.body.appendChild(弹出框);
+            document.body.appendChild(popup);
             
-            // 3秒后自动消失
             setTimeout(() => {
-                popup.remove();弹出框.移除();
+                popup.remove();
             }, 3000);
         }
 
-        // 批量生成弹窗（模拟多线程效果）
-        function startBlessRain开始祈雨() {
+        // 3. 批量启动
+        function startRomance开始恋爱() {
+            // 生成爱心（每30毫秒一个）
+            setInterval设置定时器(createHeart创建心形, 30);
+            
+            // 生成弹窗（每100毫秒一个）
             let count = 0;
             const interval = setInterval设置定时器(() => {
-                createPopup();
-                count计数++;计数++;
-                if (count计数 >= 200) {
+                createPopup创建弹窗();
+                count++;
+                if (count >= 200) {
                     clearInterval(interval);
                 }
-            }, 10);
+            }, 100);
         }
 
-        // 页面加载后自动开始
-        window.addEventListener('load', startBlessRain);
+        // 页面加载自动开始
+        window.addEventListener('load', startRomance);
+        
         // 点击屏幕再次触发
-        document.body.addEventListener('click', startBlessRain);文档.body.addEventListener('click', 开始祈雨);
-    </script>
-</body>
+        document.body.addEventListener('click'点击, startRomance);
+    </script脚本>
+</body正文>
 </html>
+
